@@ -2,20 +2,20 @@ package it.epicode.U5_W1_D1_Pratica.configuration;
 
 
 import it.epicode.U5_W1_D1_Pratica.bean.*;
-import it.epicode.U5_W1_D1_Pratica.enumerations.StatoOrdine;
 import it.epicode.U5_W1_D1_Pratica.enumerations.StatoTavolo;
 import it.epicode.U5_W1_D1_Pratica.enumerations.TipoDrink;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 
-import java.time.LocalDate;
-import java.util.Arrays;
 
 @Configuration
+@PropertySource("application.properties")
 public class AppConfig {
 
-    @Bean
+    @Bean (name = "water")
     public Drink getWater() {
         Drink water = new Drink();
         water.setTipoDrink(TipoDrink.ANALCOLICO);
@@ -25,7 +25,7 @@ public class AppConfig {
         return water;
     }
 
-    @Bean
+    @Bean(name = "lemonade")
     public Drink getLemonade() {
         Drink lemonade = new Drink();
         lemonade.setTipoDrink(TipoDrink.ANALCOLICO);
@@ -36,7 +36,7 @@ public class AppConfig {
 
     }
 
-    @Bean
+    @Bean(name = "wine")
     public Drink getWine() {
         Drink wine = new Drink();
         wine.setTipoDrink(TipoDrink.ALCOLICO);
@@ -134,25 +134,22 @@ public class AppConfig {
         return salami;
     }
 
-    @Bean
-    public Tavolo tavolo1(){
-        Tavolo tavolo1 = new Tavolo();
-        tavolo1.setNumeroTavolo(1);
-        tavolo1.setStatoTavolo(StatoTavolo.OCCUPATO);
-        tavolo1.setMaxCoperti(5);
-        return tavolo1;
+    @Bean("t1")
+    public Tavolo getTavolo1(@Value("${tavolo1.coperto}") double costoCoperto){
+        Tavolo t1 = new Tavolo();
+        t1.setCostoCoperto(costoCoperto);
+        t1.setStatoTavolo(StatoTavolo.LIBERO);
+        t1.setNumero(1);
+        t1.setNumeroMaxCoperti(6);
+        return t1;
     }
-
-    @Bean
-    public Ordine ordineTavolo1(Pizza margherita, Drink getWater, Tavolo tavolo1) {
-        Ordine ordine = new Ordine();
-        ordine.setNumero(1);
-        ordine.setStatoOrdine(StatoOrdine.IN_CORSO);
-        ordine.setNumeroCoperti(4);
-        ordine.setOraAcquisizione(LocalDate.now());
-        ordine.setTavolo(tavolo1);
-        ordine.setElementi(Arrays.asList(margherita, getWater, getLemonade(), getHawaiianPizza(),
-                getsalamiPizza(), getHawaiianPizza(), getWine()));
-        return ordine;
+    @Bean("t2")
+    public Tavolo getTavolo2(@Value("${tavolo2.coperto}") double costoCoperto){
+        Tavolo t2 = new Tavolo();
+        t2.setNumero(2);
+        t2.setNumeroMaxCoperti(4);
+        t2.setStatoTavolo(StatoTavolo.LIBERO);
+        t2.setCostoCoperto(costoCoperto);
+        return t2;
     }
 }

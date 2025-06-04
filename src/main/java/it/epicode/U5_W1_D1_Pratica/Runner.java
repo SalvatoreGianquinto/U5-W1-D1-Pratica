@@ -1,12 +1,14 @@
 package it.epicode.U5_W1_D1_Pratica;
 
-import it.epicode.U5_W1_D1_Pratica.bean.Menu;
-import it.epicode.U5_W1_D1_Pratica.bean.Ordine;
-import it.epicode.U5_W1_D1_Pratica.bean.Tavolo;
+import it.epicode.U5_W1_D1_Pratica.bean.*;
+import it.epicode.U5_W1_D1_Pratica.enumerations.StatoOrdine;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalTime;
+import java.util.List;
 
 
 @Component // serve per permettere a Spring di gestire completamente la classe
@@ -15,25 +17,27 @@ import org.springframework.stereotype.Component;
 public class Runner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(U5W1D1PraticaApplication.class);
-
+        //serve per accedere al contesto di Spring
+        AnnotationConfigApplicationContext ctx =
+                new AnnotationConfigApplicationContext(U5W1D1PraticaApplication.class);
+        //abbiamo recuperato dal contesto di Spring un oggetto di tipo Drink
         Menu menu = ctx.getBean(Menu.class);
         menu.stampaMenu();
 
-        Tavolo tavolo1 = ctx.getBean(Tavolo.class);
+        Ordine o1 = new Ordine();
+        o1.setNumOrdine(1);
+        o1.setNumCoperti(4);
+        o1.setOraOrdine(LocalTime.of(21, 0, 0));
+        o1.setStatoOrdine(StatoOrdine.IN_CORSO);
+        o1.setTavolo(ctx.getBean("t1", Tavolo.class));
+        o1.setProdotti(List.of(ctx.getBean("water", Drink.class),
+                ctx.getBean("wine", Drink.class),
+                ctx.getBean("margherita", Pizza.class),
+                ctx.getBean("hawaiianPizza", Pizza.class),
+                ctx.getBean("hawaiianPizza", Pizza.class)));
 
-        Ordine ordine = ctx.getBean(Ordine.class);
+        System.out.println(o1);
 
-        System.out.println("\n=== ORDINE ===");
-        System.out.println("Numero ordine: " + ordine.getNumero());
-        System.out.println("Stato ordine: " + ordine.getStatoOrdine());
-        System.out.println("Tavolo: " + ordine.getTavolo().getNumeroTavolo());
-        System.out.println("Numero coperti: " + ordine.getNumeroCoperti());
-        System.out.println("Ora acquisizione: " + ordine.getOraAcquisizione());
-        System.out.println("Elementi ordine:");
-        ordine.getElementi().forEach(e ->
-                System.out.println(" - " + e.getNome() + " | Prezzo: €" + e.getPrezzo()));
-        System.out.println("Totale: €" + ordine.getTotale());
-
+        System.out.println(o1.totaleOrdine());
     }
 }
