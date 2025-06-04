@@ -138,7 +138,7 @@ public class AppConfig {
     public Tavolo getTavolo1(@Value("${tavolo1.coperto}") double costoCoperto){
         Tavolo t1 = new Tavolo();
         t1.setCostoCoperto(costoCoperto);
-        t1.setStatoTavolo(StatoTavolo.LIBERO);
+        t1.setStatoTavolo(StatoTavolo.OCCUPATO);
         t1.setNumero(1);
         t1.setNumeroMaxCoperti(6);
         return t1;
