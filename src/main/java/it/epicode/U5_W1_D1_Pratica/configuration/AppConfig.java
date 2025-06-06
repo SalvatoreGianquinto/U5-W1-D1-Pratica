@@ -67,10 +67,10 @@ public class AppConfig {
         return mozzarella;
     }
 
-    @Bean(name = "Ham")
+    @Bean(name = "ham")
     public Topping getHam() {
         Topping ham = new Topping();
-        ham.setNome("Ham");
+        ham.setNome("ham");
         ham.setPrezzo(0.99);
         ham.setCalorie(92);
         ham.setGlutenFree(true);
